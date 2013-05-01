@@ -12,7 +12,7 @@ import Angel.Data (GroupConfig(..), FileRequest)
 startFileManager req = forever $ fileManager req
 
 fileManager :: TChan FileRequest -> IO ()
-fileManager req = do 
+fileManager req = do
     (path, resp) <- atomically $ readTChan req
     mh <- try $ openFile path AppendMode
     case mh of

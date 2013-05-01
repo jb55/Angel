@@ -15,7 +15,7 @@ sleepSecs s = threadDelay $ s * 1000000
 
 -- |wait for the STM TVar to be non-nothing
 waitForWake :: TVar (Maybe Int) -> IO ()
-waitForWake wakeSig = atomically $ do 
+waitForWake wakeSig = atomically $ do
     state <- readTVar wakeSig
     case state of
         Just x -> writeTVar wakeSig Nothing

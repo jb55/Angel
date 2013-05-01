@@ -27,7 +27,7 @@ void m = m >> return ()
 
 -- |produce a mapping of name -> program for every program
 buildConfigMap :: HM.HashMap Name Value -> IO SpecKey
-buildConfigMap cfg = 
+buildConfigMap cfg =
     return $! HM.foldlWithKey' addToMap M.empty $ cfg
   where
     addToMap :: SpecKey -> Name -> Value -> SpecKey
@@ -80,7 +80,7 @@ modifyProg prog n _ = prog
 -- |invoke the parser to process the file at configPath
 -- |produce a SpecKey
 processConfig :: String -> IO (Either String SpecKey)
-processConfig configPath = do 
+processConfig configPath = do
     mconf <- try $ load [Required configPath] >>=
                    getMap >>=
                    buildConfigMap >>=
@@ -92,24 +92,24 @@ processConfig configPath = do
         Left (e :: SomeException) -> return $ Left $ show e
 
 
--- |given a new SpecKey just parsed from the file, update the 
+-- |given a new SpecKey just parsed from the file, update the
 -- |shared state TVar
 updateSpecConfig :: TVar GroupConfig -> SpecKey -> STM ()
-updateSpecConfig sharedGroupConfig spec = do 
+updateSpecConfig sharedGroupConfig spec = do
     cfg <- readTVar sharedGroupConfig
     writeTVar sharedGroupConfig cfg{spec=spec}
 
--- |read the config file, update shared state with current spec, 
+-- |read the config file, update shared state with current spec,
 -- |re-sync running supervisors, wait for the HUP TVar, then repeat!
 monitorConfig :: String -> TVar GroupConfig -> TVar (Maybe Int) -> IO ()
-monitorConfig configPath sharedGroupConfig wakeSig = do 
+monitorConfig configPath sharedGroupConfig wakeSig = do
     let log = logger "config-monitor"
     mspec <- processConfig configPath
-    case mspec of 
-        Left e     -> do 
+    case mspec of
+        Left e     -> do
             log $ " <<<< Config Error >>>>\n" ++ e
             log " <<<< Config Error: Skipping reload >>>>"
-        Right spec -> do 
+        Right spec -> do
             print spec
             atomically $ updateSpecConfig sharedGroupConfig spec
             syncSupervisors sharedGroupConfig

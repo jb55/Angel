@@ -1,4 +1,4 @@
-module Main where 
+module Main where
 
 import Control.Concurrent (threadDelay, forkIO, forkOS)
 import Control.Concurrent
@@ -27,10 +27,10 @@ handleHup wakeSig = atomically $ writeTVar wakeSig $ Just 1
 handleExit :: MVar Bool -> IO ()
 handleExit mv = putMVar mv True
 
-main = do 
+main = do
     hSetBuffering stdout LineBuffering
     hSetBuffering stderr LineBuffering
-    let log = logger "main" 
+    let log = logger "main"
     log "Angel started"
     args <- getArgs
 

@@ -20,7 +20,7 @@ type RunKey = M.Map ProgramId (Program, Maybe ProcessHandle)
 type ProgramId = String
 type FileRequest = (String, TChan (Maybe Handle))
 
--- |the representation of a program is these 6 values, 
+-- |the representation of a program is these 6 values,
 -- |read from the config file
 data Program = Program {
     name :: String,

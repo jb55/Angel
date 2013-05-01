@@ -11,9 +11,9 @@ import System.Locale (defaultTimeLocale)
 cleanCalendar :: ZonedTime -> String
 cleanCalendar = formatTime defaultTimeLocale "%Y/%m/%d %H:%M:%S"
 
--- |log a line to stdout; indented for use with partial application for 
+-- |log a line to stdout; indented for use with partial application for
 -- |"local log"-type macroing
 logger :: String -> String -> IO ()
-logger lname msg = do 
+logger lname msg = do
     zt <- getZonedTime
     printf "[%s] {%s} %s\n" (cleanCalendar zt) lname msg
