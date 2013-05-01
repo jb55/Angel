@@ -66,6 +66,11 @@ modifyProg prog "stderr" _ = error "wrong type for field 'stderr'; string requir
 modifyProg prog "directory" (String s) = prog{workingDir = (Just $ T.unpack s)}
 modifyProg prog "directory" _ = error "wrong type for field 'directory'; string required"
 
+modifyProg prog "workers" (Number n)
+  | n < 1 = error "number of workers must be > 0"
+  | otherwise = prog{workers = Just $ round n}
+modifyProg prog "workers" _ = error "wrong type for field 'workers'; integer required"
+
 modifyProg prog "logger" (String s) = prog{logExec = (Just $ T.unpack s)}
 modifyProg prog "logger" _ = error "wrong type for field 'logger'; string required"
 
